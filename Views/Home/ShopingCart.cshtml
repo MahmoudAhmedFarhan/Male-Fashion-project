@@ -1,0 +1,114 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ShopingCart
+
+@if (Model == null)
+{
+    <div>No Items In Your Cart</div>
+}
+else
+{
+<!-- Shopping Cart ection Begin -->
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="shopping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                             
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Image</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        @foreach (var i in Model.shopingCartItems)
+                        {
+                        <tbody>
+                            <tr>
+                                <td class="product__cart__item">
+                                    <div class="product__cart__item__pic">
+                                        <img src="~/Uploads/@i.ImageName" width="100" height="100">
+                                    </div>
+                                    <div class="product__cart__item__text">
+                                        <h6>@i.ItemName</h6>
+                                        <h5>@i.Price</h5>
+                                    </div>
+                                </td>
+                                <td class="quantity__item">
+                                    <div class="quantity">
+                                        <div class="pro-qty-2">
+                                           
+                                            <input class="cartInput" type="text" data-price="@i.Price" onkeyup="ChangeQty(this);" value="@i.Qty">
+                                          
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                <td class="cart__price">@i.Total</td>
+                                <td class="cart__close"><a asp-controller="Home" asp-action="RemoveItem" asp-route-id="@i.ItemId"><i class="fa fa-close" ></i></a></td>
+                            </tr>
+                            
+                        </tbody>
+                        }
+
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn">
+                            <a asp-controller="Home" asp-action="Shop">Continue Shopping</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn update__btn">
+                            <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cart__discount">
+                    <h6>Discount codes</h6>
+                    <form action="#">
+                        <input type="text" placeholder="Coupon code">
+                        <button type="submit">Apply</button>
+                    </form>
+                </div>
+                <div class="cart__total">
+                    <h6>Cart total</h6>
+                    <ul>
+                       
+                        <li id="total1">Total <span>@Model.Total</span></li>
+                    </ul>
+                    <a asp-controller="Home" asp-action="CheckOut" class="primary-btn">Proceed to checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts
+{
+<script>
+    function ChangeQty(input) {
+        console.log("enter function");
+        let price = parseFloat($(input).data("price"));
+        console.log(price);
+        $(input).closest("td").next("td").html(price * parseFloat($(input).val()));
+        UpdateTotals();
+    }
+    function UpdateTotals() {
+        let total = 0;
+        $(".cartInput").each(function (index, element) {
+            total = total + parseFloat($(element).val()) * parseFloat($(element).data("price"));
+        });
+        $("#total1").html(total);
+    }
+</script>
+}
+<!-- Shopping Cart Section End -->
+}

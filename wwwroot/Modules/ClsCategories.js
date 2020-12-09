@@ -1,0 +1,4 @@
+﻿let ClsCategories = {
+    LoadCategories: function ()
+
+}
